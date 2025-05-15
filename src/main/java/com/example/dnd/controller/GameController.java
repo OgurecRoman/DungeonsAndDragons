@@ -59,21 +59,13 @@ public class GameController {
 
     @PostMapping("/connect")
     public String connectGame(@ModelAttribute Game game,
-                              Principal principal,
-                              RedirectAttributes redirectAttributes) {
+                             Principal principal,
+                             RedirectAttributes redirectAttributes) {
         User player = (User) userService.loadUserByUsername(principal.getName());
         gameService.connectUserToGame(game.getId(), player.getUsername());
 
         redirectAttributes.addAttribute("id", game.getId());
-        return "redirect:/games/{id}";
-    }
 
-    @GetMapping("/{id}")
-    public String viewGame(@PathVariable Long id, Model model) {
-        Game game = gameRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Game not found"));
-        model.addAttribute("game", game);
-        return "game";
+        return "redirect:/games/{id}";
     }
 }

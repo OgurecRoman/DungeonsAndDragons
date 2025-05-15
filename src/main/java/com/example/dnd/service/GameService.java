@@ -27,6 +27,6 @@ public class GameService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         game.getPlayers().add(user);
-        userRepository.save(user); // обновление связи
+        userRepository.save(user);
     }
 }
