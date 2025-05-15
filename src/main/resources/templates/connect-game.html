@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Подключение к игре</title>
+</head>
+<body>
+<h1>Создать новую игру</h1>
+
+<form th:action="@{/games/connect}" th:object="${game}" method="post">
+    <div>
+        <label>Ссылка на подключение:</label>
+        <input type="text" th:field="*{id}" required>
+    </div>
+
+    <button type="submit">Подключиться</button>
+</form>
+</body>
+</html>

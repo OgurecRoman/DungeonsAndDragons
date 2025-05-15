@@ -6,11 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +22,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    // Геттеры и сеттеры
+    @ManyToMany(mappedBy = "players")
+    private Set<Game> games = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -32,6 +35,10 @@ public class User implements UserDetails {
 
     public String getUsername() {
         return username;
+    }
+
+    public Set<Game> getGames() {
+        return games;
     }
 
     @Override
@@ -69,5 +76,9 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setGames(Set<Game> games) {
+        this.games = games;
     }
 }
