@@ -17,6 +17,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/register", "/login").permitAll()
+                        .requestMatchers("/mygames").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

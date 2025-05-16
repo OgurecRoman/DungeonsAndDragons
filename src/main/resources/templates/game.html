@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Главная</a>
         <div sec:authorize="isAuthenticated()">
-            <a class="navbar-brand" href="/games">Мои игры</a>
+            <a class="navbar-brand" href="/mygames">Мои игры</a>
         </div>
         <div class="ms-auto d-flex">
             <div sec:authorize="isAuthenticated()">
@@ -40,6 +40,12 @@
             <p><h4>Игроков:</h4> <span th:text="${game.players.size()}"></span>/<span
                 th:text="${game.maxPlayers}"></span></p>
 
+            <button class="btn btn-outline-primary mb-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#shareModal">
+                <i class="bi bi-share"></i> Поделиться ссылкой
+            </button>
+
             <h4>Участники:</h4>
             <ul>
                 <li th:each="player : ${game.players}" th:text="${player.username}"></li>
@@ -49,7 +55,6 @@
         <div class="col-md-9">
             <div class="container chat-container">
                 <h2 class="text-center mb-4" th:text="${game.name}">Чат игры</h2>
-
                 <div id="chat-messages">
                     <div th:each="message : ${messages}">
                         <div th:if="${message.isSpecial()}" class="dice-result text-center my-2 p-2 bg-light rounded">
@@ -90,6 +95,37 @@
     </div>
 </div>
 
+<div class="modal fade" id="shareModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Пригласить в игру</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">ID комнаты:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control"
+                               th:value="${game.id}" id="roomId" readonly>
+                        <button class="btn btn-outline-secondary"
+                                onclick="copyToClipboard('roomId')">
+                            Копировать
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Пароль:</label>
+                    <input type="text" class="form-control" value="Нет пароля" readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="diceModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -105,6 +141,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        element.select();
+        document.execCommand('copy');
+
+        // Показываем уведомление
+        const originalText = element.nextElementSibling.innerHTML;
+        element.nextElementSibling.innerHTML = 'Скопировано!';
+        setTimeout(() => {
+            element.nextElementSibling.innerHTML = originalText;
+        }, 2000);
+    }
+</script>
+
 <script th:inline="javascript">
     const pathParts = window.location.pathname.split('/');
     const gameId = pathParts[2];

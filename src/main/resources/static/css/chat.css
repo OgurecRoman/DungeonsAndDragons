@@ -72,6 +72,18 @@
     color: #333;
 }
 
+#shareModal .modal-content {
+    border-radius: 10px;
+}
+
+#shareModal .input-group-text {
+    cursor: pointer;
+}
+
+#shareModal .input-group-text:hover {
+    background-color: #e9ecef;
+}
+
 #chat-messages {
     height: 500px;
     overflow-y: auto;

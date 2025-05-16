@@ -32,9 +32,8 @@ dependencies {
 }
 
 test {
-    testLogging {
-        events "passed", "skipped", "failed"
-        showStandardStreams = true
-    }
+	testLogging {
+		events "passed", "skipped", "failed"
+		showStandardStreams = true
+	}
 }
-
