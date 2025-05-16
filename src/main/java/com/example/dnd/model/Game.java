@@ -2,9 +2,7 @@ package com.example.dnd.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,9 +14,6 @@ public class Game {
     private String name;
     private String theme;
     private int maxPlayers = 10;
-
-    @OneToMany(mappedBy = "game")
-    private List<Message> messages = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
