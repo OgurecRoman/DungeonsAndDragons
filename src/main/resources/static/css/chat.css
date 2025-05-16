@@ -49,6 +49,29 @@
     padding: 15px;
 }
 
+.dice-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.dice-select {
+    padding: 10px 15px;
+    margin: 5px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.dice-result {
+    text-align: center;
+    margin: 10px 0;
+    font-weight: bold;
+    color: #333;
+}
+
 #chat-messages {
     height: 500px;
     overflow-y: auto;

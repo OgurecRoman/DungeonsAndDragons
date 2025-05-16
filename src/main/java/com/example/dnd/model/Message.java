@@ -19,12 +19,19 @@ public class Message {
     @ManyToOne
     private Game game;
 
+    @Column(nullable = false)
+    private boolean special = false;
+
     public Long getId() {
         return id;
     }
 
     public String getText() {
         return text;
+    }
+
+    public boolean isSpecial() {
+        return special;
     }
 
     public LocalDateTime getTimestamp() {
@@ -57,5 +64,9 @@ public class Message {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void setSpecial(boolean special) {
+        this.special = special;
     }
 }

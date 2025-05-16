@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <title th:text="${game.name} + ' - Чат'">Чат игры</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/chat.css}" rel="stylesheet">
+    <link th:href="@{/css/chat.css}" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -49,18 +51,27 @@
                 <h2 class="text-center mb-4" th:text="${game.name}">Чат игры</h2>
 
                 <div id="chat-messages">
-                    <div th:each="message : ${messages}"
-                         th:class="${message.author.id == currentUser.id} ? 'message my-message' : 'message other-message'">
-                        <div class="message-author" th:text="${message.author.username}"></div>
-                        <div class="message-text" th:text="${message.text}"></div>
-                        <div class="message-time"
-                             th:text="${#temporals.format(message.timestamp, 'HH:mm dd.MM.yyyy')}"></div>
+                    <div th:each="message : ${messages}">
+                        <div th:if="${message.isSpecial()}" class="dice-result text-center my-2 p-2 bg-light rounded">
+                            <div class="message-text">
+                                <strong th:text="${message.author.username + ' 🎲 ' + message.text}"></strong>
+                            </div>
+                        </div>
+                        <div th:unless="${message.isSpecial}"
+                             th:class="${message.author.id == currentUser.id} ? 'message my-message' : 'message other-message'">
+                            <div class="message-author" th:text="${message.author.username}"></div>
+                            <div class="message-text" th:text="${message.text}"></div>
+                            <div class="message-time"
+                                 th:text="${#temporals.format(message.timestamp, 'HH:mm dd.MM.yyyy')}"></div>
+                        </div>
                     </div>
                 </div>
-
                 <form th:action="@{/games/{id}(id=${game.id})}" th:object="${newMessage}" method="post">
                     <input type="hidden" name="gameId" th:value="${game.id}">
                     <div class="input-group mb-3">
+                        <button type="button" class="dice-btn" data-bs-toggle="modal" data-bs-target="#diceModal">
+                            <img src="/images/dice.png" alt="Бросить кубик" width="30">
+                        </button>
                         <input type="text" class="form-control" th:field="*{text}" placeholder="Введите сообщение...">
                         <button class="btn btn-primary" type="submit">Отправить</button>
                     </div>
@@ -78,5 +89,75 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="diceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Выберите кубик</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-primary dice-roll" data-sides="6">D6</button>
+                <button class="btn btn-primary dice-roll" data-sides="8">D8</button>
+                <button class="btn btn-primary dice-roll" data-sides="20">D20</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    const pathParts = window.location.pathname.split('/');
+    const gameId = pathParts[2];
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Обработка броска кубика
+        document.querySelectorAll('.dice-roll').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const sides = this.getAttribute('data-sides');
+
+                try {
+                    const token = document.querySelector('meta[name="_csrf"]').content;
+                    const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+                    const response = await fetch(`/games/${gameId}/roll-dice?sides=${sides}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            [header]: token
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log("Server response:", data);
+
+                    addDiceResultToChat(data.sides, data.result, data.user);
+
+                    // Закрываем модальное окно
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('diceModal'));
+                    if (modal) modal.hide();
+
+                } catch (error) {
+                    console.error("Error rolling dice:", error);
+                    alert("Произошла ошибка при броске кубика");
+                }
+            });
+        });
+
+        // Добавление результата в чат
+        function addDiceResultToChat(sides, result, user) {
+            const chatMessages = document.getElementById('chat-messages');
+            const diceMessage = document.createElement('div');
+            diceMessage.className = 'dice-result text-center my-2 p-2 bg-light rounded';
+            diceMessage.innerHTML = `<strong>${user} 🎲 Выпало: ${result} (d${sides})</strong>`;
+            chatMessages.appendChild(diceMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    });
+</script>
 </body>
 </html>
