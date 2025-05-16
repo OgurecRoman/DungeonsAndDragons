@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="">
 <head>
     <meta charset="UTF-8">
     <title>Подключение к игре</title>
@@ -36,7 +36,9 @@
     <form th:action="@{/games/connect}" th:object="${game}" method="post">
         <div>
             <label>Ссылка на подключение:</label>
-            <input type="text" th:field="*{id}" required>
+            <label>
+                <input type="text" th:field="*{id}" required>
+            </label>
         </div>
 
         <button type="submit" class="btn btn-primary">Подключиться</button>

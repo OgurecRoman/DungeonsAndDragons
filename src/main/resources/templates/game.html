@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="">
 <head>
     <meta charset="UTF-8">
     <title th:text="${game.name} + ' - Чат'">Чат игры</title>
@@ -36,9 +36,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <p><h4>Тема:</h4> <span th:text="${game.theme}"></span></p>
+            <p><h4>Тема:</h4> <span th:text="${game.theme}"></span>
             <p><h4>Игроков:</h4> <span th:text="${game.players.size()}"></span>/<span
-                th:text="${game.maxPlayers}"></span></p>
+                th:text="${game.maxPlayers}"></span>
 
             <button class="btn btn-outline-primary mb-3"
                     data-bs-toggle="modal"
@@ -77,7 +77,9 @@
                         <button type="button" class="dice-btn" data-bs-toggle="modal" data-bs-target="#diceModal">
                             <img src="/images/dice.png" alt="Бросить кубик" width="30">
                         </button>
-                        <input type="text" class="form-control" th:field="*{text}" placeholder="Введите сообщение...">
+                        <label>
+                            <input type="text" class="form-control" th:field="*{text}" placeholder="Введите сообщение...">
+                        </label>
                         <button class="btn btn-primary" type="submit">Отправить</button>
                     </div>
                 </form>
@@ -106,8 +108,8 @@
                 <div class="mb-3">
                     <label class="form-label">ID комнаты:</label>
                     <div class="input-group">
-                        <input type="text" class="form-control"
-                               th:value="${game.id}" id="roomId" readonly>
+                        <label for="roomId"></label><input type="text" class="form-control"
+                                                           th:value="${game.id}" id="roomId" readonly>
                         <button class="btn btn-outline-secondary"
                                 onclick="copyToClipboard('roomId')">
                             Копировать
@@ -116,7 +118,9 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Пароль:</label>
-                    <input type="text" class="form-control" value="Нет пароля" readonly>
+                    <label>
+                        <input type="text" class="form-control" value="Нет пароля" readonly>
+                    </label>
                 </div>
             </div>
             <div class="modal-footer">
