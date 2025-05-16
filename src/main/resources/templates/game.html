@@ -121,7 +121,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Закрыть</button>
+                        data-bs-dismiss="modal">Закрыть
+                </button>
             </div>
         </div>
     </div>
@@ -161,11 +162,11 @@
     const pathParts = window.location.pathname.split('/');
     const gameId = pathParts[2];
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         // Обработка броска кубика
         document.querySelectorAll('.dice-roll').forEach(btn => {
-            btn.addEventListener('click', async function() {
+            btn.addEventListener('click', async function () {
                 const sides = this.getAttribute('data-sides');
 
                 try {

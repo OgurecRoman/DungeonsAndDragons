@@ -30,9 +30,9 @@
     </div>
 </nav>
 
-<h1>Создать новую игру</h1>
-
 <div class="container mt-5">
+    <h1>Подключиться к игре</h1>
+    <h5>Вставьте ID комнаты в поле</h5>
     <form th:action="@{/games/connect}" th:object="${game}" method="post">
         <div>
             <label>Ссылка на подключение:</label>
