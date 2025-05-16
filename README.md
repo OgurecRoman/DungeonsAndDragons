@@ -33,9 +33,8 @@ Dungeons & Dragons (ДнД) — это настольная ролевая иг�
 - Spring Boot
 - Gradle
 - Thymeleaf
-- WebSocket
 - Lombok
-- H2 / PostgreSQL 
+- MySQL
 
 ---
 
